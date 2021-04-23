@@ -33,8 +33,8 @@ return [
             ],
             'token' => [
                 'signer_key'    => 'tant',
-                'public_key'    => 'file://path/public.key',
-                'private_key'   => 'file://path/private.key',
+                'public_key'    => root_path() . 'cert/' . 'public.key',
+                'private_key'   => root_path() . 'cert/' . 'private.key',
                 'not_before'    => 0,
                 'expires_at'    => 3600,
                 'refresh_ttL'   => 7200,
@@ -127,7 +127,8 @@ public function login()
     return json([
         'token' => Jwt::token($uid, ['params1' => 1, 'params2' => 2])->toString(),
     ]);
-    
+    $uid = 1996;
+    return var_dump(Jwt::token($uid, ['sid' => 1, 'username' => 'fc'])->toString());
     // 自定义用户模型
     return json([
         'token' => Jwt::token($uid, ['model' => CustomMember::class])->toString(),
@@ -152,6 +153,9 @@ class User {
         if (true === Jwt::verify($token)) {
             // 验证成功
         }
+        
+        $uid = app('jwt.token')->getClaims()['jti'];
+        $all = $username = app('jwt.token')->getClaims();
         
         // 验证成功
         // 如配置用户模型文件 可获取当前用户信息
